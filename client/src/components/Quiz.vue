@@ -112,58 +112,58 @@ export default {
           id: 0,
           name: "Секреты TON"
         },
-        {
-          id: 1,
-          name: "Криптовалютный Мир"
-        },
-        {
-          id: 2,
-          name: "Безопасность в блокчейне"
-        },
-        {
-          id: 3,
-          name: "Криптографические Алгоритмы"
-        },
-        {
-          id: 4,
-          name: "Платформы Смарт-Контрактов"
-        },
-        {
-          id: 5,
-          name: "DeFi и Стейкинг"
-        },
-        {
-          id: 6,
-          name: "Основы Майнинга"
-        },
-        {
-          id: 7,
-          name: "Регуляция Криптовалют"
-        },
-        {
-          id: 8,
-          name: "NFT и Метавселенная"
-        },
-        {
-          id: 9,
-          name: "Основы Токеномики"
-        },
-        {
-          id: 10,
-          name: "Telegram и Крипто"
-        },
-        {
-          id: 11,
-          name: "Кто Есть Кто в Крипто?"
-        },
-        {
-          id: 12,
-          name: "Кто Есть Кто в Крипто?"
-        },
-        {
-          id: 13,
-          name: "Кошельки и Транзакции"
-        },
+        // {
+        //   id: 1,
+        //   name: "Криптовалютный Мир"
+        // },
+        // {
+        //   id: 2,
+        //   name: "Безопасность в блокчейне"
+        // },
+        // {
+        //   id: 3,
+        //   name: "Криптографические Алгоритмы"
+        // },
+        // {
+        //   id: 4,
+        //   name: "Платформы Смарт-Контрактов"
+        // },
+        // {
+        //   id: 5,
+        //   name: "DeFi и Стейкинг"
+        // },
+        // {
+        //   id: 6,
+        //   name: "Основы Майнинга"
+        // },
+        // {
+        //   id: 7,
+        //   name: "Регуляция Криптовалют"
+        // },
+        // {
+        //   id: 8,
+        //   name: "NFT и Метавселенная"
+        // },
+        // {
+        //   id: 9,
+        //   name: "Основы Токеномики"
+        // },
+        // {
+        //   id: 10,
+        //   name: "Telegram и Крипто"
+        // },
+        // {
+        //   id: 11,
+        //   name: "Кто Есть Кто в Крипто?"
+        // },
+        // {
+        //   id: 12,
+        //   name: "Кто Есть Кто в Крипто?"
+        // },
+        // {
+        //   id: 13,
+        //   name: "Кошельки и Транзакции"
+        // },
       ],
       chosenCategory: null,
       chosenDifficulty: null,
@@ -211,13 +211,14 @@ export default {
     },
     // Fetch question data from Open Trivia DB and call populateQuestions()
     startQuiz() {
-      const url = this.generateUrl();
+      // const url = this.generateUrl();
 
       this.isStarted = true;
 
       axios
-        .get(url)
+        .get('http://localhost:3333/question/get')
         .then((response) => {
+          console.log(response)
           // If results not returned successfully
           if (response.data.response_code != 0) {
             return Promise.reject(response);
@@ -267,113 +268,113 @@ export default {
           newQuestion.text = questionData.question;
           newQuestion.answers = this.shuffle(answers);
           this.questions.push(newQuestion);
-          this.questions = [
-            {
-              text: 'What technology allows TON to scale almost without limits?',
-              answers: [
-                {
-                  text: "Multi-chain mining",
-                  correct: false
-                },
-                {
-                  text: "AI-based smart contracts",
-                  correct: false
-                },
-                {
-                  text: "Sharding technology",
-                  correct: true
-                },
-                {
-                  text: "Decentralized cloud",
-                  correct: false
-                },
-              ]
-            },
-            {
-              text: 'In what year did Pavel Durov announce Telegram\'s participation canceling from the TON project?',
-              answers: [
-                {
-                  text: "2018",
-                  correct: false
-                },
-                {
-                  text: "2019",
-                  correct: false
-                },
-                {
-                  text: "2020",
-                  correct: true
-                },
-                {
-                  text: "2021",
-                  correct: false
-                },
-              ]
-            },
-            {
-              text: 'How many active wallets were registered on the TON network by mid-2024?',
-              answers: [
-                {
-                  text: "About 9 million",
-                  correct: false
-                },
-                {
-                  text: "About 10 million",
-                  correct: false
-                },
-                {
-                  text: "About 12.9 million",
-                  correct: true
-                },
-                {
-                  text: "About 15 million",
-                  correct: false
-                },
-              ]
-            },
-            {
-              text: 'How many cores are required for a full node according to the documentation?',
-              answers: [
-                {
-                  text: "4",
-                  correct: false
-                },
-                {
-                  text: "8",
-                  correct: false
-                },
-                {
-                  text: "16",
-                  correct: true
-                },
-                {
-                  text: "32",
-                  correct: false
-                },
-              ]
-            },
-            {
-              text: 'What is Toncoin Bridge used for?',
-              answers: [
-                {
-                  text: "For mining Toncoin on various blockchains",
-                  correct: false
-                },
-                {
-                  text: "For creating new smart contracts on the TON network",
-                  correct: false
-                },
-                {
-                  text: "For exchanging tokens within the TON blockchain without involving other networks",
-                  correct: false
-                },
-                {
-                  text: "For transferring Toncoin between the TON blockchain and the Ethereum blockchain, as well as between the TON blockchain and the BNB Smart Chain",
-                  correct: true
-                },
-              ]
-            },
-          ]
+          // this.questions = [
+          //   {
+          //     text: 'What technology allows TON to scale almost without limits?',
+          //     answers: [
+          //       {
+          //         text: "Multi-chain mining",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "AI-based smart contracts",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "Sharding technology",
+          //         correct: true
+          //       },
+          //       {
+          //         text: "Decentralized cloud",
+          //         correct: false
+          //       },
+          //     ]
+          //   },
+          //   {
+          //     text: 'In what year did Pavel Durov announce Telegram\'s participation canceling from the TON project?',
+          //     answers: [
+          //       {
+          //         text: "2018",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "2019",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "2020",
+          //         correct: true
+          //       },
+          //       {
+          //         text: "2021",
+          //         correct: false
+          //       },
+          //     ]
+          //   },
+          //   {
+          //     text: 'How many active wallets were registered on the TON network by mid-2024?',
+          //     answers: [
+          //       {
+          //         text: "About 9 million",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "About 10 million",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "About 12.9 million",
+          //         correct: true
+          //       },
+          //       {
+          //         text: "About 15 million",
+          //         correct: false
+          //       },
+          //     ]
+          //   },
+          //   {
+          //     text: 'How many cores are required for a full node according to the documentation?',
+          //     answers: [
+          //       {
+          //         text: "4",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "8",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "16",
+          //         correct: true
+          //       },
+          //       {
+          //         text: "32",
+          //         correct: false
+          //       },
+          //     ]
+          //   },
+          //   {
+          //     text: 'What is Toncoin Bridge used for?',
+          //     answers: [
+          //       {
+          //         text: "For mining Toncoin on various blockchains",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "For creating new smart contracts on the TON network",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "For exchanging tokens within the TON blockchain without involving other networks",
+          //         correct: false
+          //       },
+          //       {
+          //         text: "For transferring Toncoin between the TON blockchain and the Ethereum blockchain, as well as between the TON blockchain and the BNB Smart Chain",
+          //         correct: true
+          //       },
+          //     ]
+          //   },
+          // ]
         });
       }
     },
