@@ -1,10 +1,11 @@
 import express from 'express';
-import fs from 'fs';
+import fs, { createWriteStream } from 'fs';
 import session from 'express-session';
 import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator'; 
 import TonWeb from "tonweb";
 import cors from 'cors';
+import { create } from 'domain';
 //import { WalletV4ContractR2 } from 'tonweb/dist/types/contract/wallet/v4/wallet-v4-contract-r2';
 
 dotenv.config();
@@ -16,13 +17,14 @@ const NODE_API_URL = 'https://toncenter.com/api/v2/jsonRPC';
 const tonweb = new TonWeb(new TonWeb.HttpProvider(NODE_API_URL, {apiKey: process.env.TONCENTER_API_KEY}));
 const masterKeyPair = TonWeb.utils.nacl.sign.keyPair.fromSecretKey(TonWeb.utils.hexToBytes(process.env.JETTON_MASTER_KEY));
 
-const getJettonWallet = () => {
+
+const getJettonWallet = async () => {
     //const keyPair = nacl.box.keyPair.fromSecretKey(process.env.TOKEN_MASTER_KEY);
-    const WalletClass = tonweb.wallet.all['v4R2'];
+    const WalletClass = tonweb.wallet.all.v4R2; //tonweb.wallet.all['v4R2'];
     const wallet = new WalletClass(tonweb.provider, {
-        publicKey:  masterKeyPair.publicKey,
-        wc: 0
+        publicKey:  masterKeyPair.publicKey
     });
+    //const walletAddress = await wallet.getAddress();
     //const wallet = tonweb.wallet.create({publicKey: masterKeyPair.publicKey, WalletV4ContractR2});
     return wallet;
 }
@@ -31,11 +33,23 @@ const getWallet = (address) => {
     return wallet;
 } 
 
+const getClientJettonWallet = async (address) => {
+
+  const wallet = getWallet(address);
+  const jetton = new TonWeb.token.jetton.JettonMinter(tonweb.provider, {address: process.env.JETTON_WALLET_ADDRESS});
+  const jettonWalletAddress = await jetton.getJettonWalletAddress(wallet.address);
+  return jettonWalletAddress;
+}
+
 const sendJettons = async (winnerAddress) => {
-    const jettonWalletAddress =  process.env.JETTON_WALLET_ADDRESS;
+    const jettonWalletAddress =  await getClientJettonWallet(winnerAddress);
     const jettonWallet = new TonWeb.token.jetton.JettonWallet(tonweb.provider, {address: jettonWalletAddress});
-    const wallet = getTokenWallet();
-    const seqno = await wallet.methods.seqno().call() || 0
+    const wallet = await getJettonWallet();
+    const seqno = await wallet.methods.seqno().call() || 0;
+console.log(seqno);
+console.log('winner: ' + jettonWalletAddress.toString(true, true, false));
+const masterAddress = await wallet.getAddress();
+console.log('Master: '+ masterAddress.toString(true, true, false)); 
 
     const transfer = await wallet.methods.transfer({
         secretKey: masterKeyPair.secretKey,
@@ -76,7 +90,7 @@ app.use(session({
 }));
 
 // GET: /question/get
-app.get('/question/get', async (req, res) => {
+app.get('/api/question/get', async (req, res) => {
   try {
     const data = await fs.promises.readFile('questions.json', 'utf8');
     const questions = JSON.parse(data);
@@ -88,7 +102,7 @@ app.get('/question/get', async (req, res) => {
 });
 
 // POST: /question/answer
-app.post('/question/answer',
+app.post('/api/question/answer',
     // Validation middleware
     body('answers').isArray().withMessage('answers must be an array'),
     body('answers.*').isObject().withMessage('Each item in answers must be an object'),
@@ -114,7 +128,7 @@ app.post('/question/answer',
   
 
 // GET: /session/start
-app.get('/session/start', (req, res) => {
+app.get('/api/session/start', (req, res) => {
   const wallet = req.query.wallet || null;
   // Save wallet in session if provided
   if (wallet) {
@@ -137,3 +151,4 @@ function generateUniqueId() {
  app.listen(port, () => {
    console.log(`Server is running at http://localhost:${port}`);
 });
+
