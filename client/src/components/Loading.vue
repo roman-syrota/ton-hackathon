@@ -1,6 +1,6 @@
 <template>
   <div class="loading">
-    <h1>Quizzem!</h1>
+    <h1>Quiz Payout!</h1>
     <p>{{ text }}</p>
     <svg
       xmlns="http://www.w3.org/2000/svg"

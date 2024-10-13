@@ -3,17 +3,7 @@
     <div class="setup-container" v-if="!isStarted">
       <Loading v-if="!categories.length" text="Loading..." />
       <div v-else>
-        <h1>Quizzem!</h1>
-<!--        <h2>Difficulty</h2>-->
-<!--        <div class="difficulties-container">-->
-<!--          <div-->
-<!--            class="setup-option"-->
-<!--            :class="{ 'is-selected': chosenDifficulty == difficulty.level }"-->
-<!--            v-for="(difficulty, index) in difficulties"-->
-<!--            :key="index"-->
-<!--            @click="setDifficulty(difficulty.level)"-->
-<!--          >{{ difficulty.name }}</div>-->
-<!--        </div>-->
+        <h1>Quiz Payout!</h1>
         <h2>Category</h2>
         <div class="categories-container">
           <div
@@ -24,7 +14,7 @@
             @click="setCategory(category.id)"
           >{{ category.name }}</div>
         </div>
-        <button class="button button--start" type="button" @click="startQuiz()">Start</button>
+        <button class="button button--start" :disabled="isDisableStart" type="button" @click="startQuiz()">Start</button>
       </div>
     </div>
     <div v-if="isStarted">
@@ -90,13 +80,7 @@ import axios from 'axios';
 
 import Loading from './Loading.vue';
 import FooterNav from './FooterNav.vue';
-
-// const difficulties = [
-//   { level: null, name: 'Any Difficulty' },
-//   { level: 'easy', name: 'Easy' },
-//   { level: 'medium', name: 'Medium' },
-//   { level: 'hard', name: 'Hard' },
-// ];
+import * as TON_CONNECT_UI from "@tonconnect/ui";
 
 export default {
   name: 'Quiz',
@@ -106,11 +90,16 @@ export default {
   },
   data() {
     return {
+      isDisableStart: true,
+      currentWallet: null,
+      currentWalletInfo: null,
+      currentAccount: null,
+      currentIsConnectedStatus: null,
       isStarted: false,
       categories: [
         {
           id: 0,
-          name: "Секреты TON"
+          name: "TON Foundation"
         },
         // {
         //   id: 1,
@@ -170,41 +159,10 @@ export default {
       questions: [],
       chosenAnswers: [],
       currentQuestionIndex: 0,
+      answersOnQuestions: []
     };
   },
-  mounted() {
-    this.init();
-  },
   methods: {
-    // Fetch the Open Trivia DB categories
-    init() {
-      const url = 'https://opentdb.com/api_category.php';
-
-      // axios
-      //   .get(url)
-      //   .then((response) => {
-      //     // If results not returned successfully
-      //     if (
-      //       response.data.trivia_categories == null ||
-      //       !response.data.trivia_categories.length
-      //     ) {
-      //       return Promise.reject(response);
-      //     }
-      //
-      //     this.categories = response.data.trivia_categories;
-      //
-      //     // Remove extra categorisation from long category names
-      //     this.categories.forEach((category) => {
-      //       category.name = category.name.replace(/\w+: /gi, '');
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     alert(
-      //       'Sorry, something went wrong trying to load the categories. Please try again.'
-      //     );
-      //   });
-    },
     // Update the chosen category
     setCategory(category) {
       this.chosenCategory = category;
@@ -215,8 +173,10 @@ export default {
 
       this.isStarted = true;
 
+      const url = `http://localhost:${process.env.VUE_APP_PORT}/question/get`
+
       axios
-        .get('http://localhost:3333/question/get')
+        .get(url)
         .then((response) => {
           console.log(response)
           // If results not returned successfully
@@ -232,17 +192,6 @@ export default {
             'Sorry, something went wrong trying to load the questions. Please try again.'
           );
         });
-    },
-    // Create the Open Trivia DB URL with the chosen parameters
-    generateUrl() {
-      let difficultyParam =
-        this.chosenDifficulty == null
-          ? ''
-          : `&difficulty=${this.chosenDifficulty}`;
-      let categoryParam =
-        this.chosenCategory == null ? '' : `&category=${this.chosenCategory}`;
-
-      return `https://opentdb.com/api.php?amount=5${categoryParam}${difficultyParam}`;
     },
     // Populate questions array
     populateQuestions(responseJson) {
@@ -268,113 +217,6 @@ export default {
           newQuestion.text = questionData.question;
           newQuestion.answers = this.shuffle(answers);
           this.questions.push(newQuestion);
-          // this.questions = [
-          //   {
-          //     text: 'What technology allows TON to scale almost without limits?',
-          //     answers: [
-          //       {
-          //         text: "Multi-chain mining",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "AI-based smart contracts",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "Sharding technology",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "Decentralized cloud",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'In what year did Pavel Durov announce Telegram\'s participation canceling from the TON project?',
-          //     answers: [
-          //       {
-          //         text: "2018",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "2019",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "2020",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "2021",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'How many active wallets were registered on the TON network by mid-2024?',
-          //     answers: [
-          //       {
-          //         text: "About 9 million",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "About 10 million",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "About 12.9 million",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "About 15 million",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'How many cores are required for a full node according to the documentation?',
-          //     answers: [
-          //       {
-          //         text: "4",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "8",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "16",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "32",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'What is Toncoin Bridge used for?',
-          //     answers: [
-          //       {
-          //         text: "For mining Toncoin on various blockchains",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "For creating new smart contracts on the TON network",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "For exchanging tokens within the TON blockchain without involving other networks",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "For transferring Toncoin between the TON blockchain and the Ethereum blockchain, as well as between the TON blockchain and the BNB Smart Chain",
-          //         correct: true
-          //       },
-          //     ]
-          //   },
-          // ]
         });
       }
     },
@@ -407,6 +249,24 @@ export default {
       } else if (this.calcScore() >= this.questions.length / 2) {
         text = 'Good work!';
       }
+
+      axios
+          .post(`http://localhost:${process.env.VUE_APP_PORT}/question/answer`, {
+            answers: this.chosenAnswers
+          })
+          .then((response) => {
+            console.log(response)
+            // If results not returned successfully
+            if (response.data.response_code != 0) {
+              return Promise.reject(response);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            alert(
+                'Sorry, something went wrong trying to send the answers. Please try again.'
+            );
+          });
 
       return text;
     },
@@ -451,6 +311,27 @@ export default {
       return textArea.value;
     },
   },
+  mounted() {
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://dev-new.itispay.com/storage/tonconnect-manifest.json',
+      buttonRootId: 'ton-connect'
+    });
+
+    const subscribe = tonConnectUI.onStatusChange(
+        walletAndwalletInfo => {
+          this.isDisableStart = !walletAndwalletInfo
+          this.currentWallet = tonConnectUI.wallet;
+          this.currentWalletInfo = tonConnectUI.walletInfo;
+          this.currentAccount = tonConnectUI.account;
+          this.currentIsConnectedStatus = tonConnectUI.connected;
+
+          localStorage.setItem('currentWallet', this.currentWallet)
+          localStorage.setItem('currentWalletInfo', this.currentWalletInfo)
+          localStorage.setItem('currentAccount', this.currentAccount)
+          localStorage.setItem('currentIsConnectedStatus', this.currentIsConnectedStatus)
+        }
+    );
+  }
 };
 </script>
 
@@ -524,6 +405,13 @@ h3 {
   background-color: $btn-bg--active;
   &:hover {
     background-color: $btn-hover;
+  }
+  &:disabled {
+    background-color: lightslategray;
+
+    &:hover {
+      cursor: not-allowed;
+    }
   }
 }
 .quiz {
