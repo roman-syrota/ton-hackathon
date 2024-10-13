@@ -1,29 +1,46 @@
 <template>
-  <TonConnectUIProvider :options="options">
-  <div id="app">
-    <div class="ton-connect-button">
-<!--      <span>User-friendly address: {{ userFriendlyAddress }}</span>-->
-<!--      <span>Raw address: {{ rawAddress }}</span>-->
-<!--      <span>Connected wallet: {{ wallet.name }}</span>-->
-<!--      <span>Device: {{ wallet.device.appName }}</span>-->
-      <TonConnectButton />
-    </div>
-    <Quiz class="quiz-container" />
+  <div>
+      <div id="app">
+        <div id="ton-connect"></div>
+        <div class="ton-connect-button">
+        </div>
+        <Quiz class="quiz-container" />
+      </div>
   </div>
-  </TonConnectUIProvider>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { TonConnectUIProvider, TonConnectButton, useTonAddress, useTonWallet } from '@townsquarelabs/ui-vue';
+import {onMounted, ref} from 'vue';
+import * as TON_CONNECT_UI from "@tonconnect/ui";
 import Quiz from './components/Quiz.vue';
 
-const options = ref({
-  manifestUrl: "https://dev-new.itispay.com/storage/tonconnect-manifest.json"
+const currentWallet = ref()
+const currentWalletInfo = ref()
+const currentAccount = ref()
+const currentIsConnectedStatus = ref()
+
+onMounted(() => {
+  const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    manifestUrl: 'https://dev-new.itispay.com/storage/tonconnect-manifest.json',
+    buttonRootId: 'ton-connect'
+  });
+
+  const subscribe = tonConnectUI.onStatusChange(
+      walletAndwalletInfo => {
+        currentWallet.value = tonConnectUI.wallet;
+        currentWalletInfo.value = tonConnectUI.walletInfo;
+        currentAccount.value = tonConnectUI.account;
+        currentIsConnectedStatus.value = tonConnectUI.connected;
+
+        localStorage.setItem('currentWallet', currentWallet.value)
+        localStorage.setItem('currentWalletInfo', currentWalletInfo.value)
+        localStorage.setItem('currentAccount', currentAccount.value)
+        localStorage.setItem('currentIsConnectedStatus', currentIsConnectedStatus.value)
+      }
+  );
 })
-// const userFriendlyAddress = useTonAddress()
-// const rawAddress = useTonAddress(false)
-// const wallet = useTonWallet()
+
+
 </script>
 
 <style lang="scss">
@@ -90,7 +107,7 @@ a {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.ton-connect-button {
+#ton-connect {
   position: absolute;
   top: 40px;
   right: 40px;
