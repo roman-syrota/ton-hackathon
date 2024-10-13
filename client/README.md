@@ -1,4 +1,4 @@
-# Quizzem!
+# Quiz Payout!
 
 A quiz app built with Vue
 

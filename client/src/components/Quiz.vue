@@ -3,17 +3,7 @@
     <div class="setup-container" v-if="!isStarted">
       <Loading v-if="!categories.length" text="Loading..." />
       <div v-else>
-        <h1>Quizzem!</h1>
-<!--        <h2>Difficulty</h2>-->
-<!--        <div class="difficulties-container">-->
-<!--          <div-->
-<!--            class="setup-option"-->
-<!--            :class="{ 'is-selected': chosenDifficulty == difficulty.level }"-->
-<!--            v-for="(difficulty, index) in difficulties"-->
-<!--            :key="index"-->
-<!--            @click="setDifficulty(difficulty.level)"-->
-<!--          >{{ difficulty.name }}</div>-->
-<!--        </div>-->
+        <h1>Quiz Payout!</h1>
         <h2>Category</h2>
         <div class="categories-container">
           <div
@@ -24,7 +14,7 @@
             @click="setCategory(category.id)"
           >{{ category.name }}</div>
         </div>
-        <button class="button button--start" type="button" @click="startQuiz()">Start</button>
+        <button class="button button--start" :disabled="isDisableStart" type="button" @click="startQuiz()">Start</button>
       </div>
     </div>
     <div v-if="isStarted">
@@ -90,13 +80,7 @@ import axios from 'axios';
 
 import Loading from './Loading.vue';
 import FooterNav from './FooterNav.vue';
-
-// const difficulties = [
-//   { level: null, name: 'Any Difficulty' },
-//   { level: 'easy', name: 'Easy' },
-//   { level: 'medium', name: 'Medium' },
-//   { level: 'hard', name: 'Hard' },
-// ];
+import * as TON_CONNECT_UI from "@tonconnect/ui";
 
 export default {
   name: 'Quiz',
@@ -106,11 +90,16 @@ export default {
   },
   data() {
     return {
+      isDisableStart: true,
+      currentWallet: null,
+      currentWalletInfo: null,
+      currentAccount: null,
+      currentIsConnectedStatus: null,
       isStarted: false,
       categories: [
         {
           id: 0,
-          name: "Секреты TON"
+          name: "TON Foundation"
         },
         // {
         //   id: 1,
@@ -170,41 +159,10 @@ export default {
       questions: [],
       chosenAnswers: [],
       currentQuestionIndex: 0,
+      answersOnQuestions: []
     };
   },
-  mounted() {
-    this.init();
-  },
   methods: {
-    // Fetch the Open Trivia DB categories
-    init() {
-      const url = 'https://opentdb.com/api_category.php';
-
-      // axios
-      //   .get(url)
-      //   .then((response) => {
-      //     // If results not returned successfully
-      //     if (
-      //       response.data.trivia_categories == null ||
-      //       !response.data.trivia_categories.length
-      //     ) {
-      //       return Promise.reject(response);
-      //     }
-      //
-      //     this.categories = response.data.trivia_categories;
-      //
-      //     // Remove extra categorisation from long category names
-      //     this.categories.forEach((category) => {
-      //       category.name = category.name.replace(/\w+: /gi, '');
-      //     });
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //     alert(
-      //       'Sorry, something went wrong trying to load the categories. Please try again.'
-      //     );
-      //   });
-    },
     // Update the chosen category
     setCategory(category) {
       this.chosenCategory = category;
@@ -233,17 +191,6 @@ export default {
           );
         });
     },
-    // Create the Open Trivia DB URL with the chosen parameters
-    generateUrl() {
-      let difficultyParam =
-        this.chosenDifficulty == null
-          ? ''
-          : `&difficulty=${this.chosenDifficulty}`;
-      let categoryParam =
-        this.chosenCategory == null ? '' : `&category=${this.chosenCategory}`;
-
-      return `https://opentdb.com/api.php?amount=5${categoryParam}${difficultyParam}`;
-    },
     // Populate questions array
     populateQuestions(responseJson) {
       if (responseJson.length > 0) {
@@ -268,6 +215,7 @@ export default {
           newQuestion.text = questionData.question;
           newQuestion.answers = this.shuffle(answers);
           this.questions.push(newQuestion);
+          this.questions = this.questions.slice(0, 2)
           // this.questions = [
           //   {
           //     text: 'What technology allows TON to scale almost without limits?',
@@ -408,6 +356,24 @@ export default {
         text = 'Good work!';
       }
 
+      axios
+          .post('http://localhost:3333/question/answer', {
+            answers: this.chosenAnswers
+          })
+          .then((response) => {
+            console.log(response)
+            // If results not returned successfully
+            if (response.data.response_code != 0) {
+              return Promise.reject(response);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            alert(
+                'Sorry, something went wrong trying to send the answers. Please try again.'
+            );
+          });
+
       return text;
     },
     // Check if a given index is the correct answer for a given question
@@ -451,6 +417,27 @@ export default {
       return textArea.value;
     },
   },
+  mounted() {
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://dev-new.itispay.com/storage/tonconnect-manifest.json',
+      buttonRootId: 'ton-connect'
+    });
+
+    const subscribe = tonConnectUI.onStatusChange(
+        walletAndwalletInfo => {
+          this.isDisableStart = !walletAndwalletInfo
+          this.currentWallet = tonConnectUI.wallet;
+          this.currentWalletInfo = tonConnectUI.walletInfo;
+          this.currentAccount = tonConnectUI.account;
+          this.currentIsConnectedStatus = tonConnectUI.connected;
+
+          localStorage.setItem('currentWallet', this.currentWallet)
+          localStorage.setItem('currentWalletInfo', this.currentWalletInfo)
+          localStorage.setItem('currentAccount', this.currentAccount)
+          localStorage.setItem('currentIsConnectedStatus', this.currentIsConnectedStatus)
+        }
+    );
+  }
 };
 </script>
 
@@ -524,6 +511,13 @@ h3 {
   background-color: $btn-bg--active;
   &:hover {
     background-color: $btn-hover;
+  }
+  &:disabled {
+    background-color: lightslategray;
+
+    &:hover {
+      cursor: not-allowed;
+    }
   }
 }
 .quiz {

@@ -10,37 +10,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue';
-import * as TON_CONNECT_UI from "@tonconnect/ui";
 import Quiz from './components/Quiz.vue';
-
-const currentWallet = ref()
-const currentWalletInfo = ref()
-const currentAccount = ref()
-const currentIsConnectedStatus = ref()
-
-onMounted(() => {
-  const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-    manifestUrl: 'https://dev-new.itispay.com/storage/tonconnect-manifest.json',
-    buttonRootId: 'ton-connect'
-  });
-
-  const subscribe = tonConnectUI.onStatusChange(
-      walletAndwalletInfo => {
-        currentWallet.value = tonConnectUI.wallet;
-        currentWalletInfo.value = tonConnectUI.walletInfo;
-        currentAccount.value = tonConnectUI.account;
-        currentIsConnectedStatus.value = tonConnectUI.connected;
-
-        localStorage.setItem('currentWallet', currentWallet.value)
-        localStorage.setItem('currentWalletInfo', currentWalletInfo.value)
-        localStorage.setItem('currentAccount', currentAccount.value)
-        localStorage.setItem('currentIsConnectedStatus', currentIsConnectedStatus.value)
-      }
-  );
-})
-
-
 </script>
 
 <style lang="scss">
