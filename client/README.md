@@ -2,8 +2,6 @@
 
 A quiz app built with Vue
 
-View the [live app](https://mjgwood.github.io/vue-quiz-app/)
-
 ## Project setup
 ```
 npm install

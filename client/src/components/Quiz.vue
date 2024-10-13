@@ -173,12 +173,11 @@ export default {
 
       this.isStarted = true;
 
-      const url = `http://localhost:${process.env.VUE_APP_PORT}/question/get`
+      console.log(process.env.VUE_APP_API_URL)
 
       axios
-        .get(url)
+        .get(`${process.env.VUE_APP_API_URL}/question/get`)
         .then((response) => {
-          console.log(response)
           // If results not returned successfully
           if (response.data.response_code != 0) {
             return Promise.reject(response);
@@ -250,8 +249,10 @@ export default {
         text = 'Good work!';
       }
 
+      console.log(process.env.VUE_APP_API_URL)
+
       axios
-          .post(`http://localhost:${process.env.VUE_APP_PORT}/question/answer`, {
+          .post(`${process.env.VUE_APP_API_URL}/question/answer`, {
             answers: this.chosenAnswers
           })
           .then((response) => {
