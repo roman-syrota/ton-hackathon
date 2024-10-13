@@ -128,9 +128,6 @@ function generateUniqueId() {
 }
 
 
-// app.listen(port, () => {
-//   console.log(`Server is running at http://localhost:${port}`);
-// });
-const wallet = getJettonWallet();
-const walletAddress = await wallet.getAddress();
-console.log(walletAddress.toString(true, true, true));
+ app.listen(port, () => {
+   console.log(`Server is running at http://localhost:${port}`);
+});
