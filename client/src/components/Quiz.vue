@@ -257,10 +257,6 @@ export default {
           })
           .then((response) => {
             console.log(response)
-            // If results not returned successfully
-            if (response.data.response_code != 0) {
-              return Promise.reject(response);
-            }
           })
           .catch((error) => {
             console.log(error);
