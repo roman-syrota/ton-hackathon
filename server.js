@@ -4,6 +4,7 @@ import session from 'express-session';
 import dotenv from 'dotenv';
 import { body, validationResult } from 'express-validator'; 
 import TonWeb from "tonweb";
+import cors from 'cors';
 //import { WalletV4ContractR2 } from 'tonweb/dist/types/contract/wallet/v4/wallet-v4-contract-r2';
 
 dotenv.config();
@@ -60,6 +61,11 @@ const port = 3333;
 
 // Use built-in JSON parser
 app.use(express.json());
+// Use CORS middleware and allow any origin
+app.use(cors({
+    origin: '*', // Allow any origin
+    credentials: true, // Allow credentials (cookies) to be sent
+  }));
 
 // Session configuration
 app.use(session({
