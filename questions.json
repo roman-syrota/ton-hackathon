@@ -1,0 +1,185 @@
+{
+  "response_code": 0,
+  "results": [
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What technology allows TON to scale almost without limits?",
+      "correct_answer": "Sharding technology",
+      "incorrect_answers": [
+        "Multi-chain mining",
+        "AI-based smart contracts",
+        "Decentralized cloud"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "In what year did Pavel Durov announce Telegram's participation canceling from the TON project?",
+      "correct_answer": "2020",
+      "incorrect_answers": [
+        "2018",
+        "2019",
+        "2021"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "How many active wallets were registered on the TON network by mid-2024?",
+      "correct_answer": "About 12.9 million",
+      "incorrect_answers": [
+        "About 9 million",
+        "About 10 million",
+        "About 15 million"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "How many cores are required for a full node according to the documentation?",
+      "correct_answer": "16",
+      "incorrect_answers": [
+        "4",
+        "8",
+        "32"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What is Toncoin Bridge used for?",
+      "correct_answer": "For transferring Toncoin between the TON blockchain and the Ethereum blockchain, as well as between the TON blockchain and the BNB Smart Chain.",
+      "incorrect_answers": [
+        "For mining Toncoin on various blockchains.",
+        "For creating new smart contracts on the TON network.",
+        "For exchanging tokens within the TON blockchain without involving other networks."
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What is the average daily transaction volume processed on the TON blockchain in 2024?",
+      "correct_answer": "5-10 million transactions",
+      "incorrect_answers": [
+        "1-3 million transactions",
+        "3-5 million transactions",
+        "10-15 million transactions"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "How many active validators support the TON network in 2024, and in how many countries are they located?",
+      "correct_answer": "371 validators in 29 countries",
+      "incorrect_answers": [
+        "300 validators in 25 countries",
+        "400 validators in 30 countries",
+        "450 validators in 35 countries"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What makes the TON blockchain unique compared to others?",
+      "correct_answer": "Dynamic sharding capability",
+      "incorrect_answers": [
+        "Full decentralization",
+        "Instant transactions",
+        "High user anonymity"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What is the name of the system that allows the use of easy-to-remember names instead of complex addresses in TON?",
+      "correct_answer": "TON DNS",
+      "incorrect_answers": [
+        "TON Name Resolver",
+        "TON Domain Service",
+        "TON Address System"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "If TON could turn into food, what would it be?",
+      "correct_answer": "Lasagna with many layers",
+      "incorrect_answers": [
+        "Burger with endless ingredients",
+        "Pizza with endless toppings",
+        "Chocolate with multiple fillings"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What function does TON Storage perform?",
+      "correct_answer": "Stores decentralized data",
+      "incorrect_answers": [
+        "Runs smart contracts",
+        "Optimizes transactions",
+        "Manages Toncoins"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What elements are included in the recommendations for creating a successful Telegram app? Special question from Slava Yakimenko",
+      "correct_answer": "Bot, community, mini-app, analytics",
+      "incorrect_answers": [
+        "Development, testing, promotion",
+        "Marketing, advertising, user support",
+        "Investment, development, user acquisition"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What advantage does TON Proxy provide to users?",
+      "correct_answer": "Decentralized internet access",
+      "incorrect_answers": [
+        "Fast file transfer",
+        "Low transaction fees",
+        "Anonymous payments"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What does 'Open' symbolize in 'The Open Network'?",
+      "correct_answer": "Open access for all",
+      "incorrect_answers": [
+        "Open source code",
+        "Open borders between networks",
+        "Open smart contract ledger"
+      ]
+    },
+    {
+      "type": "multiple",
+      "difficulty": "medium",
+      "category": "Blockchain: TON",
+      "question": "What’s the name of the TON mascot?",
+      "correct_answer": "Tony",
+      "incorrect_answers": [
+        "Tobby",
+        "Tomas",
+        "Tonic"
+      ]
+    }
+  ]
+}
