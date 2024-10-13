@@ -13,8 +13,7 @@ const NODE_API_URL = 'https://toncenter.com/api/v2/jsonRPC';
 const tonweb = new TonWeb(new TonWeb.HttpProvider(NODE_API_URL, {apiKey: process.env.TONCENTER_API_KEY}));
 
     // Generate a 12-word mnemonic
-//const mnemonic = bip39.generateMnemonic(128); // 128 bits of entropy
-const mnemonic = 'clap shallow twist onion torch track warfare pond level fringe cute angry';
+const mnemonic = bip39.generateMnemonic(128); // 128 bits of entropy
 const keyPair = TonWeb.utils.keyPairFromSeed(await TonWebMnemonic.mnemonicToSeed(mnemonic.split(' ')))
 
 const WalletClass = tonweb.wallet.all['v4R2'];
