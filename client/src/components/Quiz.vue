@@ -173,8 +173,10 @@ export default {
 
       this.isStarted = true;
 
+      const url = `http://localhost:${process.env.VUE_APP_PORT}/question/get`
+
       axios
-        .get('http://localhost:3333/question/get')
+        .get(url)
         .then((response) => {
           console.log(response)
           // If results not returned successfully
@@ -215,114 +217,6 @@ export default {
           newQuestion.text = questionData.question;
           newQuestion.answers = this.shuffle(answers);
           this.questions.push(newQuestion);
-          this.questions = this.questions.slice(0, 2)
-          // this.questions = [
-          //   {
-          //     text: 'What technology allows TON to scale almost without limits?',
-          //     answers: [
-          //       {
-          //         text: "Multi-chain mining",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "AI-based smart contracts",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "Sharding technology",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "Decentralized cloud",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'In what year did Pavel Durov announce Telegram\'s participation canceling from the TON project?',
-          //     answers: [
-          //       {
-          //         text: "2018",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "2019",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "2020",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "2021",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'How many active wallets were registered on the TON network by mid-2024?',
-          //     answers: [
-          //       {
-          //         text: "About 9 million",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "About 10 million",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "About 12.9 million",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "About 15 million",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'How many cores are required for a full node according to the documentation?',
-          //     answers: [
-          //       {
-          //         text: "4",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "8",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "16",
-          //         correct: true
-          //       },
-          //       {
-          //         text: "32",
-          //         correct: false
-          //       },
-          //     ]
-          //   },
-          //   {
-          //     text: 'What is Toncoin Bridge used for?',
-          //     answers: [
-          //       {
-          //         text: "For mining Toncoin on various blockchains",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "For creating new smart contracts on the TON network",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "For exchanging tokens within the TON blockchain without involving other networks",
-          //         correct: false
-          //       },
-          //       {
-          //         text: "For transferring Toncoin between the TON blockchain and the Ethereum blockchain, as well as between the TON blockchain and the BNB Smart Chain",
-          //         correct: true
-          //       },
-          //     ]
-          //   },
-          // ]
         });
       }
     },
@@ -357,7 +251,7 @@ export default {
       }
 
       axios
-          .post('http://localhost:3333/question/answer', {
+          .post(`http://localhost:${process.env.VUE_APP_PORT}/question/answer`, {
             answers: this.chosenAnswers
           })
           .then((response) => {
