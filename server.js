@@ -2,7 +2,7 @@ import express from 'express';
 import fs, { createWriteStream } from 'fs';
 import session from 'express-session';
 import dotenv from 'dotenv';
-import { body, validationResult } from 'express-validator'; 
+import { body, validationResult } from 'express-validator';
 import TonWeb from "tonweb";
 import cors from 'cors';
 import { create } from 'domain';
@@ -31,7 +31,7 @@ const getJettonWallet = async () => {
 const getWallet = (address) => {
     const wallet = tonweb.wallet.create({address: address});
     return wallet;
-} 
+}
 
 const getClientJettonWallet = async (address) => {
 
@@ -49,7 +49,7 @@ const sendJettons = async (winnerAddress) => {
 console.log(seqno);
 console.log('winner: ' + jettonWalletAddress.toString(true, true, false));
 const masterAddress = await wallet.getAddress();
-console.log('Master: '+ masterAddress.toString(true, true, false)); 
+console.log('Master: '+ masterAddress.toString(true, true, false));
 
     const transfer = await wallet.methods.transfer({
         secretKey: masterKeyPair.secretKey,
@@ -58,7 +58,7 @@ console.log('Master: '+ masterAddress.toString(true, true, false));
         seqno: seqno,
         //sendMode: 128,
         payload: await jettonWallet.createTransferBody({
-            queryId: seqno, 
+            queryId: seqno,
             jettonAmount: process.env.REWARD_AMOUNT, // jetton amount in units
             toAddress: new TonWeb.utils.Address(winnerAddress),
             responseAddress: new TonWeb.utils.Address(winnerAddress)
@@ -83,7 +83,7 @@ app.use(cors({
 
 // Session configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET, 
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } // Set to true if using HTTPS
@@ -105,9 +105,6 @@ app.get('/api/question/get', async (req, res) => {
 app.post('/api/question/answer',
     // Validation middleware
     body('answers').isArray().withMessage('answers must be an array'),
-    body('answers.*').isObject().withMessage('Each item in answers must be an object'),
-    body('answers.*.question').isString().withMessage('question must be a string'),
-    body('answers.*.answer').isString().withMessage('answer must be a string'),
     async (req, res) => {
       // Handle validation errors
       const errors = validationResult(req);
@@ -115,17 +112,17 @@ app.post('/api/question/answer',
         console.error('Validation errors:', errors.array());
         return res.status(400).json({ errors: errors.array() });
       }
-  
-      const { answers } = req.body; 
-  
 
-  
+      const { answers } = req.body;
+
+
+
       console.log('Received answers:', answers);
-  
+
       res.send('Answers received');
     }
   );
-  
+
 
 // GET: /session/start
 app.get('/api/session/start', (req, res) => {
@@ -138,7 +135,7 @@ app.get('/api/session/start', (req, res) => {
   if (!req.session.userId) {
     req.session.userId = generateUniqueId();
   }
- 
+
   res.json({ session: req.session.userId });
 });
 
